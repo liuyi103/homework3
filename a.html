@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.0.0rc1.js"></script>
+  <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+
+  <script type="text/javascript">
+   var data,locx,locy;
+    
+      var map=null;
+
+  function GetMap()
+  {
+
+    map = new Microsoft.Maps.Map(document.getElementById("mapDiv"),
+    {credentials: "AsSKIto9ZIl0GiYWE6vsyV7-IL0up1Gk4-bjPtm-y7E1pKCxm96Qd3enLuOJHvpR",
+    center: new Microsoft.Maps.Location(31.03, 121.4),
+    mapTypeId: Microsoft.Maps.MapTypeId.road,
+    zoom: 10});
+    Microsoft.Maps.Events.addHandler(map, 'click', displayLatLong);
+    locx=31.03;
+      locy=121.4;
+
+//      var fso, ts, s ; 
+//var ForReading = 1; 
+//
+//fso = new ActiveXObject("Scripting.FileSystemObject"); 
+//ts = fso.OpenTextFile("data2.json", ForReading); 
+//s = ts.ReadLine();
+//      data=eval(s);
+      
+
+    /*var center = map.getCenter();
+            
+            // Add a pin to the center of the map, using a custom icon
+    var pin = new Microsoft.Maps.Pushpin(center, {icon: 'bluepush.png', width: 50, height: 50, draggable: true}); 
+
+    map.entities.push(pin);
+    alert(center);*/
+      
+  };
+      //var locx,locy=0,0
+      function displayLatLong(e) {
+              if (e.targetType == "map") {
+                  map.entities.clear();
+                  var point = new Microsoft.Maps.Point(e.getX(), e.getY());
+                  var loc = e.target.tryPixelToLocation(point);
+                  
+                  var tmp=String(loc).substring(10,String(loc).length-1).split(',');
+                  locx=Number(tmp[0]);
+                  locy=Number(tmp[1]);
+                  var pin = new Microsoft.Maps.Pushpin(loc, {icon: 'bluepush.png', width: 30, height: 30, draggable: true}); 
+
+                    map.entities.push(pin);
+                  
+              }
+          }
+      function doit(event){
+          var anyt = $.getJSON( "try.json", function(data2) {
+              alert(String(data2));
+  console.log( "success" );
+})
+  .done(function() {
+    console.log( "second success" );
+  })
+  .fail(function() {
+    console.log( "error" );
+  })
+  .always(function() {
+    console.log( "complete" );
+  });
+ 
+          for(var i in data)
+              alert(i);
+          alert("nothing");
+ //         var tmp=data.keys
+//          var tp=document.getElementById("t1").value;
+//          var rg=document.getElementById("t2").value;
+//          var tosel=new Array();
+//          for(var i=0;i<tmp.length;i++)
+//            if(tmp[i].substr(len(tp))==tp)
+//                tosel+=data[tmp[i]]
+//        alert(tosel);
+      }
+  </script>
+</head>
+<body onload="GetMap();">
+  <div >
+  type: <input type="text" id="t1" name="fname" />
+  range: <input type="text" id="t2" name="lname" />
+      <button type="button" onclick="doit(event)">Find</button>
+  </div>
+  <div id='mapDiv' style="position:relative; width:400px; height:400px;"></div>
+</body>
+</html>
